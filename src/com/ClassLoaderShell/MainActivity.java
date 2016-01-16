@@ -16,13 +16,7 @@ public class MainActivity extends Activity{
 		context = this;
 
 		TextView tv = new TextView(context);
-		tv.setText(invokeRemoteNativeDexMethod("world"));
+		tv.setText("hello world");
 		setContentView(tv);
-		
-		StringBuilder sb = new StringBuilder();
-		sb.append("");
-		sb.toString();
 	}
-
-	private static native String invokeRemoteNativeDexMethod(String msg);
 }

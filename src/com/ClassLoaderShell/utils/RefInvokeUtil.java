@@ -89,7 +89,7 @@ public class RefInvokeUtil {
 	 * @param filedName
 	 * @return
 	 */
-	public static Object getFieldOjbect(String class_name,Object obj, String filedName){
+	public static Object getFieldObject(String class_name,Object obj, String filedName){
 		try {
 			Class obj_class = Class.forName(class_name);
 			Field field = obj_class.getDeclaredField(filedName);
@@ -155,7 +155,7 @@ public class RefInvokeUtil {
 	 * @param obj
 	 * @param filedVaule
 	 */
-	public static void setFieldOjbect(String classname, String filedName, Object obj, Object filedVaule){
+	public static void setFieldObject(String classname, String filedName, Object obj, Object filedVaule){
 		try {
 			Class obj_class = Class.forName(classname);
 			Field field = obj_class.getDeclaredField(filedName);

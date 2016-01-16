@@ -12,5 +12,6 @@ public class Constants {
 		public static final String application_meta_data 		= "APPLICATION_CLASS_NAME";
 		public static final String android_app_LoadedApk 		= "android.app.LoadedApk";
 		public static final String android_app_ActivityThread 	= "android.app.ActivityThread";
+		
 	}
 }

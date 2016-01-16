@@ -16,7 +16,7 @@ public class ProxyApplication extends ShellEntry implements UncaughtExceptionHan
 	private static Context context;
 
 	static{
-//		System.loadLibrary("ClassLoaderShell");
+		System.loadLibrary("ClassLoaderShell");
 	}
 	
 	@Override
