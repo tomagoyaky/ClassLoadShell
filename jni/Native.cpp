@@ -8,6 +8,7 @@
 #include <errno.h>
 #include <limits.h>	// PATH_MAX
 #include <fcntl.h>  // open()
+#include "dexdump/DexDump.cpp"
 #include "libdvm/DvmDex.h"
 #include "libdex/DexFile.h"
 #include "AndroidHelper.h"
@@ -44,6 +45,52 @@ namespace JNI{
 
 	static void jni_DexProcess(JNIEnv* env, jobject thiz, jstring dexFilePath){
 		LOGD("jni_DexProcess");
+
+		const char  *classDescriptor;
+		DexFile *pDexFile = pDvmDex->pDexFile;
+		dumpFileHeader(pDexFile);
+
+		LOGI("===========================================================");
+		for (int idx = 0; idx < pDexFile->pHeader->classDefsSize; ++idx) {
+			//dumpClass(pDvmDex->pDexFile, i, NULL);
+
+			const DexClassDef* pClassDef = dexGetClassDef(pDexFile, idx);
+			if (pClassDef == NULL) {
+				LOGW("Trouble reading classDef\n");
+				return;
+			}
+			const char *accessStr = createAccessFlagStr(pClassDef->accessFlags, kAccessForClass);
+			const char *classDescriptor = dexStringByTypeIdx(pDexFile, pClassDef->classIdx);
+			const char *superclassDescriptor = dexStringByTypeIdx(pDexFile, pClassDef->superclassIdx);
+			// 过滤掉系统类
+			if(strncmp(classDescriptor, "Landroid/support/", strlen("Landroid/support/")) != 0){
+				LOGW("  Class #%d : %s '%s' <- %s (superclass)\n", idx, accessStr, classDescriptor, superclassDescriptor);
+				const u1* pEncodedData = dexGetClassData(pDexFile, pClassDef);
+				if (pEncodedData == NULL) {
+					LOGE("Trouble reading pEncodedData\n");
+					return;
+				}
+
+				DexClassData* pClassData = dexReadAndVerifyClassData(&pEncodedData, NULL);
+
+				if (pClassData == NULL) {
+					LOGE("Trouble reading pClassData\n");
+					return;
+				}
+
+				for (int i = 0; i < (int) pClassData->header.directMethodsSize; i++) {
+					DexMethod dexMethod = pClassData->directMethods[i];
+					const char *name = dexStringById(pDexFile, dexMethod.methodIdx);
+					LOGD(" Direct methods name          : '%s'\n", name);
+				}
+
+				for (int i = 0; i < (int) pClassData->header.virtualMethodsSize; i++) {
+					DexMethod dexMethod = pClassData->directMethods[i];
+					const char *name = dexStringById(pDexFile, dexMethod.methodIdx);
+					LOGD(" Virtual methods name          : '%s'\n", name);
+				}
+			}
+		}
 	}
 
 	// XXX 0x3 注册本地方法

@@ -18,7 +18,7 @@
 #define LOG_TAG "tomagoyaky_native"
 
 #if DEBUG
-#define LOGD(fmt,...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, "[%s]" fmt, __FUNCTION__,##__VA_ARGS__)
+#define LOGD(fmt,...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "[%s]" fmt, __FUNCTION__,##__VA_ARGS__)
 #define LOGI(fmt,...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, "[%s]" fmt, __FUNCTION__,##__VA_ARGS__)
 #define LOGV(fmt,...) __android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "[%s]" fmt, __FUNCTION__,##__VA_ARGS__)
 #define LOGW(fmt,...) __android_log_print(ANDROID_LOG_WARN, LOG_TAG, "[%s]" fmt, __FUNCTION__,##__VA_ARGS__)

@@ -56,10 +56,16 @@ obj/local/armeabi/objs/ClassLoaderShell/Main.o: jni/Main.cpp \
  E:/Android/android-ndk-r10/platforms/android-19/arch-arm/usr/include/linux/fcntl.h \
  E:/Android/android-ndk-r10/platforms/android-19/arch-arm/usr/include/asm/fcntl.h \
  E:/Android/android-ndk-r10/platforms/android-19/arch-arm/usr/include/asm-generic/fcntl.h \
+ jni/dexdump/DexDump.cpp jni/libdex/DexFile.h jni/Common.h \
+ jni/libdex/SysUtil.h jni/libdex/CmdUtils.h jni/libdex/DexCatch.h \
+ jni/libdex/DexFile.h jni/libdex/Leb128.h jni/libdex/DexClass.h \
+ jni/libdex/DexDebugInfo.h jni/libdex/DexOpcodes.h jni/libdex/DexProto.h \
+ jni/libdex/InstrUtils.h jni/libdex/DexOpcodes.h \
+ E:/Android/android-ndk-r10/platforms/android-19/arch-arm/usr/include/getopt.h \
+ E:/Android/android-ndk-r10/platforms/android-19/arch-arm/usr/include/assert.h \
  jni/libdvm/DvmDex.h \
  E:/Android/android-ndk-r10/platforms/android-19/arch-arm/usr/include/pthread.h \
  E:/Android/android-ndk-r10/platforms/android-19/arch-arm/usr/include/sched.h \
- jni/libdex/DexFile.h jni/Common.h jni/libdex/SysUtil.h \
  jni/libdex/DexFile.h jni/AndroidHelper.h
 
 E:/Android/android-ndk-r10/platforms/android-19/arch-arm/usr/include/jni.h:
@@ -176,17 +182,43 @@ E:/Android/android-ndk-r10/platforms/android-19/arch-arm/usr/include/asm/fcntl.h
 
 E:/Android/android-ndk-r10/platforms/android-19/arch-arm/usr/include/asm-generic/fcntl.h:
 
-jni/libdvm/DvmDex.h:
-
-E:/Android/android-ndk-r10/platforms/android-19/arch-arm/usr/include/pthread.h:
-
-E:/Android/android-ndk-r10/platforms/android-19/arch-arm/usr/include/sched.h:
+jni/dexdump/DexDump.cpp:
 
 jni/libdex/DexFile.h:
 
 jni/Common.h:
 
 jni/libdex/SysUtil.h:
+
+jni/libdex/CmdUtils.h:
+
+jni/libdex/DexCatch.h:
+
+jni/libdex/DexFile.h:
+
+jni/libdex/Leb128.h:
+
+jni/libdex/DexClass.h:
+
+jni/libdex/DexDebugInfo.h:
+
+jni/libdex/DexOpcodes.h:
+
+jni/libdex/DexProto.h:
+
+jni/libdex/InstrUtils.h:
+
+jni/libdex/DexOpcodes.h:
+
+E:/Android/android-ndk-r10/platforms/android-19/arch-arm/usr/include/getopt.h:
+
+E:/Android/android-ndk-r10/platforms/android-19/arch-arm/usr/include/assert.h:
+
+jni/libdvm/DvmDex.h:
+
+E:/Android/android-ndk-r10/platforms/android-19/arch-arm/usr/include/pthread.h:
+
+E:/Android/android-ndk-r10/platforms/android-19/arch-arm/usr/include/sched.h:
 
 jni/libdex/DexFile.h:
 

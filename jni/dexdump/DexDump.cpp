@@ -382,7 +382,7 @@ static void asciify(char* out, const unsigned char* data, size_t len) {
 /*
  * Dump the file header.
  */
-void dumpFileHeader(const DexFile* pDexFile) {
+static void dumpFileHeader(const DexFile* pDexFile) {
 	const DexOptHeader* pOptHeader = pDexFile->pOptHeader;
 	const DexHeader* pHeader = pDexFile->pHeader;
 	char sanitized[sizeof(pHeader->magic) * 2 + 1];
@@ -447,7 +447,7 @@ void dumpFileHeader(const DexFile* pDexFile) {
 /*
  * Dump the "table of contents" for the opt area.
  */
-void dumpOptDirectory(const DexFile* pDexFile) {
+static void dumpOptDirectory(const DexFile* pDexFile) {
 	const DexOptHeader* pOptHeader = pDexFile->pOptHeader;
 	if (pOptHeader == NULL)
 		return;
@@ -495,7 +495,7 @@ void dumpOptDirectory(const DexFile* pDexFile) {
 /*
  * Dump a class_def_item.
  */
-void dumpClassDef(DexFile* pDexFile, int idx) {
+static void dumpClassDef(DexFile* pDexFile, int idx) {
 	const DexClassDef* pClassDef;
 	const u1* pEncodedData;
 	DexClassData* pClassData;
@@ -533,7 +533,7 @@ void dumpClassDef(DexFile* pDexFile, int idx) {
 /*
  * Dump an interface that a class declares to implement.
  */
-void dumpInterface(const DexFile* pDexFile, const DexTypeItem* pTypeItem,
+static void dumpInterface(const DexFile* pDexFile, const DexTypeItem* pTypeItem,
 		int i) {
 	const char* interfaceName = dexStringByTypeIdx(pDexFile,
 			pTypeItem->typeIdx);
@@ -550,7 +550,7 @@ void dumpInterface(const DexFile* pDexFile, const DexTypeItem* pTypeItem,
 /*
  * Dump the catches table associated with the code.
  */
-void dumpCatches(DexFile* pDexFile, const DexCode* pCode) {
+static void dumpCatches(DexFile* pDexFile, const DexCode* pCode) {
 	u4 triesSize = pCode->triesSize;
 
 	if (triesSize == 0) {
@@ -599,7 +599,7 @@ static int dumpPositionsCb(void *cnxt, u4 address, u4 lineNum) {
 /*
  * Dump the positions list.
  */
-void dumpPositions(DexFile* pDexFile, const DexCode* pCode,
+static void dumpPositions(DexFile* pDexFile, const DexCode* pCode,
 		const DexMethod *pDexMethod) {
 	LOGD("      positions     : \n");
 	const DexMethodId *pMethodId = dexGetMethodId(pDexFile,
@@ -620,7 +620,7 @@ static void dumpLocalsCb(void *cnxt, u2 reg, u4 startAddress, u4 endAddress,
 /*
  * Dump the locals list.
  */
-void dumpLocals(DexFile* pDexFile, const DexCode* pCode,
+static void dumpLocals(DexFile* pDexFile, const DexCode* pCode,
 		const DexMethod *pDexMethod) {
 	LOGD("      locals        : \n");
 
@@ -821,7 +821,7 @@ static char* indexString(DexFile* pDexFile, const DecodedInstruction* pDecInsn,
 /*
  * Dump a single instruction.
  */
-void dumpInstruction(DexFile* pDexFile, const DexCode* pCode, int insnIdx,
+static void dumpInstruction(DexFile* pDexFile, const DexCode* pCode, int insnIdx,
 		int insnWidth, const DecodedInstruction* pDecInsn) {
 	char indexBufChars[200];
 	char *indexBuf = indexBufChars;
@@ -1019,7 +1019,7 @@ void dumpInstruction(DexFile* pDexFile, const DexCode* pCode, int insnIdx,
 /*
  * Dump a bytecode disassembly.
  */
-void dumpBytecodes(DexFile* pDexFile, const DexMethod* pDexMethod) {
+static void dumpBytecodes(DexFile* pDexFile, const DexMethod* pDexMethod) {
 	const DexCode* pCode = dexGetCode(pDexFile, pDexMethod);
 	const u2* insns;
 	int insnIdx;
@@ -1087,7 +1087,7 @@ void dumpBytecodes(DexFile* pDexFile, const DexMethod* pDexMethod) {
 /*
  * Dump a "code" struct.
  */
-void dumpCode(DexFile* pDexFile, const DexMethod* pDexMethod) {
+static void dumpCode(DexFile* pDexFile, const DexMethod* pDexMethod) {
 	const DexCode* pCode = dexGetCode(pDexFile, pDexMethod);
 
 	LOGD("      registers     : %d\n", pCode->registersSize);
@@ -1107,7 +1107,7 @@ void dumpCode(DexFile* pDexFile, const DexMethod* pDexMethod) {
 /*
  * Dump a method.
  */
-void dumpMethod(DexFile* pDexFile, const DexMethod* pDexMethod, int i) {
+static void dumpMethod(DexFile* pDexFile, const DexMethod* pDexMethod, int i) {
 	const DexMethodId* pMethodId;
 	const char* backDescriptor;
 	const char* name;
@@ -1244,7 +1244,7 @@ void dumpMethod(DexFile* pDexFile, const DexMethod* pDexMethod, int i) {
 /*
  * Dump a static (class) field.
  */
-void dumpSField(const DexFile* pDexFile, const DexField* pSField, int i) {
+static void dumpSField(const DexFile* pDexFile, const DexField* pSField, int i) {
 	const DexFieldId* pFieldId;
 	const char* backDescriptor;
 	const char* name;
@@ -1298,7 +1298,7 @@ void dumpSField(const DexFile* pDexFile, const DexField* pSField, int i) {
 /*
  * Dump an instance field.
  */
-void dumpIField(const DexFile* pDexFile, const DexField* pIField, int i) {
+static void dumpIField(const DexFile* pDexFile, const DexField* pIField, int i) {
 	dumpSField(pDexFile, pIField, i);
 }
 
@@ -1310,7 +1310,7 @@ void dumpIField(const DexFile* pDexFile, const DexField* pIField, int i) {
  * If "*pLastPackage" is NULL or does not match the current class' package,
  * the value will be replaced with a newly-allocated string.
  */
-void dumpClass(DexFile* pDexFile, int idx, char** pLastPackage) {
+static void dumpClass(DexFile* pDexFile, int idx, char** pLastPackage) {
 	const DexTypeList* pInterfaces;
 	const DexClassDef* pClassDef;
 	DexClassData* pClassData = NULL;
@@ -1489,7 +1489,7 @@ static inline const u1* align32(const u1* ptr) {
  * uncompressed data if we move the compression code to libdex; otherwise
  * it's too complex to merit a fast & fragile implementation here.)
  */
-void dumpDifferentialCompressedMap(const u1** pData) {
+static void dumpDifferentialCompressedMap(const u1** pData) {
 	const u1* data = *pData;
 	const u1* dataStart = data - 1;      // format byte already removed
 	u1 regWidth;
@@ -1524,7 +1524,7 @@ void dumpDifferentialCompressedMap(const u1** pData) {
  * "*pData" should point to the start of the register map data.  Advances
  * "*pData" to the start of the next map.
  */
-void dumpMethodMap(DexFile* pDexFile, const DexMethod* pDexMethod, int idx,
+static void dumpMethodMap(DexFile* pDexFile, const DexMethod* pDexMethod, int idx,
 		const u1** pData) {
 	const u1* data = *pData;
 	const DexMethodId* pMethodId;
@@ -1592,7 +1592,7 @@ void dumpMethodMap(DexFile* pDexFile, const DexMethod* pDexMethod, int idx,
  * dig through them here, but this is pretty fragile.  DO NOT rely on
  * this or derive other code from it.
  */
-void dumpRegisterMaps(DexFile* pDexFile) {
+static void dumpRegisterMaps(DexFile* pDexFile) {
 	const u1* pClassPool = (const u1*) pDexFile->pRegisterMapPool;
 	const u4* classOffsets;
 	const u1* ptr;

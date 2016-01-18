@@ -29,6 +29,6 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := ClassLoaderShell
 LOCAL_STATIC_LIBRARIES := libdex
 LOCAL_LDLIBS	:= -llog -ldvm -lz
-LOCAL_SRC_FILES := Main.cpp dexdump/DexDump.cpp JstringUtil.cpp
+LOCAL_SRC_FILES := Main.cpp JstringUtil.cpp
 
 include $(BUILD_SHARED_LIBRARY)
