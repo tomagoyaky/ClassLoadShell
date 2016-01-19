@@ -50,5 +50,5 @@ typedef int64_t             s8;
 
 char* Jstring2CStr(JNIEnv* env, jstring jstr, int* charLen);
 jstring CStr2Jstring(JNIEnv* env, const char* pat);
-
+void DebugMem(void * buf, int len, unsigned char more);
 #endif /* COMMON_H_ */

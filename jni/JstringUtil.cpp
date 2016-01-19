@@ -4,9 +4,70 @@
  *  Created on: 2016年1月16日
  *      Author: peng
  */
-
+#include <stdio.h>
 #include <stdlib.h>
 #include <jni.h>
+#include "Common.h"
+
+void DebugMem(void * buf, int len, unsigned char more) {
+	unsigned char * curaddr;
+	int i;
+	int left;
+	int sector = 0;
+
+//	if(len > 0x20){
+//		len = 0x30;
+//	}
+	if(buf == NULL){
+		return;
+	}
+	left = len;
+	char msgbuf[1024] = {0};
+	curaddr = (unsigned char*) buf;
+
+	while (left > 0) {
+
+		if (left < 16) {
+			int cnt = sprintf(msgbuf, "%08Xh  ", (unsigned int) curaddr);
+
+			for (i = 0; i < left; i++) {
+				cnt += sprintf(msgbuf + cnt, "%02X ", *(curaddr + i));
+			}
+
+			for (i = left; i < 16; i++)
+				cnt += sprintf(msgbuf + cnt, "   ");
+
+			for (i = 0; i < left; i++) {
+				if ((*(curaddr + i) >= '!') && (*(curaddr + i) <= '~'))
+					cnt += sprintf(msgbuf + cnt, "%c", *(curaddr + i));
+				else
+					cnt += sprintf(msgbuf + cnt, ".");
+			}
+			left -= 16;
+			LOGV("%s", msgbuf);
+		} else {
+
+			int cnt = sprintf(msgbuf, "%08Xh  ", (unsigned int) curaddr);
+
+			for (i = 0; i < 16; i++) {
+				cnt += sprintf(msgbuf + cnt, "%02X ", *(curaddr + i));
+			}
+
+			for (i = 0; i < 16; i++) {
+				if ((*(curaddr + i) >= '!') && (*(curaddr + i) <= '~'))
+					cnt += sprintf(msgbuf + cnt, "%c", *(curaddr + i));
+				else
+					cnt += sprintf(msgbuf + cnt, ".");
+			}
+			LOGV("%s", msgbuf);
+		}
+
+		left -= 16;
+		sector += 16;
+		curaddr += 16;
+	}
+}
+
 char* Jstring2CStr(JNIEnv* env, jstring jstr, int* charLen) {
 	char* rtn = NULL;
 	jclass clsstring = env->FindClass("java/lang/String");

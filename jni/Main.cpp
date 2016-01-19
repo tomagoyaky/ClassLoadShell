@@ -1,7 +1,7 @@
 #include <jni.h>
 #include <stdio.h>
-#include "Common.h"
-#include "Native.cpp"
+#include "JNINative.cpp"
+#include "JstringUtil.cpp"
 
 int registerNativeMethod(JNIEnv *env);
 int LoadDexFile(JNIEnv* env);
@@ -21,7 +21,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
 	}
 
 	// 注册JNI方法
-	if(JNI::registerNativeMethod(env)){
+	if(JNINative::registerNativeMethod(env)){
 		LOGE("ERROR: native method registration failed");
 		return JNI_ERR;
 

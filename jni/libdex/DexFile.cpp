@@ -64,7 +64,6 @@ const char* dexGetPrimitiveTypeDescriptor(PrimitiveType type) {
         case PRIM_DOUBLE:  return "D";
         default:           return NULL;
     }
-
     return NULL;
 }
 

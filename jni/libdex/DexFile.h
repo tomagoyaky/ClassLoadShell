@@ -33,7 +33,7 @@
 #ifndef LIBDEX_DEXFILE_H_
 #define LIBDEX_DEXFILE_H_
 
-#include "Common.h"      // basic type defs, e.g. u1/u2/u4/u8, and LOG
+#include "Common.h"
 #include "libdex/SysUtil.h"
 
 /*

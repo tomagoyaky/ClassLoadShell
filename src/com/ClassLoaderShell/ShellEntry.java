@@ -19,6 +19,7 @@ import com.ClassLoaderShell.utils.AssetsUtil;
 import com.ClassLoaderShell.utils.Logger;
 import com.ClassLoaderShell.utils.RefInvokeUtil;
 import com.ClassLoaderShell.utils.StackTraceUtil;
+
 import dalvik.system.BaseDexClassLoader;
 
 /**
@@ -28,9 +29,9 @@ import dalvik.system.BaseDexClassLoader;
  * */
 public class ShellEntry extends Application{
 
-	private String dexPath;
-	private String odexPath;
-	private String libPath;
+	protected String dexPath;
+	protected String odexPath;
+	protected String libPath;
 	private File odex;
 	private File libs;
 	private File dex;
@@ -88,8 +89,6 @@ public class ShellEntry extends Application{
 //				this.odexPath, 
 //				this.libPath, 
 //				baseContext.getClassLoader());
-		DexClassLoaderWithNative(baseContext);
-		DexProcess(this.dexPath);
 		
 		BaseDexClassLoader dexLoader = new BaseDexClassLoader(
 				this.dexPath, 
@@ -134,37 +133,36 @@ public class ShellEntry extends Application{
 
 			Object currentActivityThread = RefInvokeUtil.invokeStaticMethod(Constants.ClassPath.android_app_ActivityThread, "currentActivityThread", new Class[]{}, new Object[]{});
 			Object mBoundApplication = RefInvokeUtil.getFieldObject(Constants.ClassPath.android_app_ActivityThread, currentActivityThread, "mBoundApplication");
-			Object loadedApkInfo = RefInvokeUtil.getFieldObject("android.app.ActivityThread$AppBindData", mBoundApplication, "info");
+			Object loadedApkInfo = RefInvokeUtil.getFieldObject("android.app.ActivityThread$AppBindData", mBoundApplication, "info");			
+			Application oldApplication = (Application)RefInvokeUtil.getFieldObject(Constants.ClassPath.android_app_ActivityThread, currentActivityThread, "mInitialApplication"); // ProxyApplication
 			
 			// XXX 0x01 删除
 			RefInvokeUtil.setFieldObject(Constants.ClassPath.android_app_LoadedApk, "mApplication", loadedApkInfo, null); //ProxyApplication
-			Object oldApplication = RefInvokeUtil.getFieldObject(Constants.ClassPath.android_app_ActivityThread, currentActivityThread,"mInitialApplication"); // ProxyApplication
 			ArrayList<Application> mAllApplications = (ArrayList<Application>)RefInvokeUtil.getFieldObject(
 					Constants.ClassPath.android_app_ActivityThread,currentActivityThread, "mAllApplications");
 			mAllApplications.remove(oldApplication);
 
 			// XXX 0x02 为原来的Application创建
-			ApplicationInfo appinfo_In_LoadedApk = (ApplicationInfo) RefInvokeUtil.getFieldObject(Constants.ClassPath.android_app_LoadedApk,  loadedApkInfo, "mApplicationInfo");
+			ApplicationInfo appinfo_In_LoadedApk = (ApplicationInfo) RefInvokeUtil.getFieldObject(Constants.ClassPath.android_app_LoadedApk, loadedApkInfo, "mApplicationInfo");
 			ApplicationInfo appinfo_In_AppBindData = (ApplicationInfo) RefInvokeUtil.getFieldObject("android.app.ActivityThread$AppBindData", mBoundApplication, "appInfo");
 			appinfo_In_LoadedApk.className = appClassName;
 			appinfo_In_AppBindData.className = appClassName;
-			Application app = (Application) RefInvokeUtil.invokeMethod(Constants.ClassPath.android_app_LoadedApk, "makeApplication", loadedApkInfo,
+			Application newApplication = (Application) RefInvokeUtil.invokeMethod(Constants.ClassPath.android_app_LoadedApk, "makeApplication", loadedApkInfo,
 				new Class[] { boolean.class, Instrumentation.class },
 				new Object[] { false, null });
-			
-			RefInvokeUtil.setFieldObject("android.app.ActivityThread","mInitialApplication", currentActivityThread, app);
+			RefInvokeUtil.setFieldObject("android.app.ActivityThread", "mInitialApplication", currentActivityThread, newApplication);
 
 			// XXX 0x04 设置上下文
-			ArrayMap mProviderMap = (ArrayMap) RefInvokeUtil.getFieldObject(Constants.ClassPath.android_app_ActivityThread, currentActivityThread,"mProviderMap");
-			Iterator it = mProviderMap.values().iterator();
+			ArrayMap<Object, Object> mProviderMap = (ArrayMap<Object, Object>) RefInvokeUtil.getFieldObject(Constants.ClassPath.android_app_ActivityThread, currentActivityThread, "mProviderMap");
+			Iterator<Object> it = mProviderMap.values().iterator();
 			while (it.hasNext()) 
 			{
 				Object providerClientRecord = it.next();
 				Object localProvider = RefInvokeUtil.getFieldObject("android.app.ActivityThread$ProviderClientRecord", providerClientRecord, "mLocalProvider");
-				RefInvokeUtil.setFieldObject("android.content.ContentProvider","mContext", localProvider, app);
+				RefInvokeUtil.setFieldObject("android.content.ContentProvider", "mContext", localProvider, newApplication);
 			}
 			// XXX 0x05 调用Application中的onCreate()
-			app.onCreate();
+			newApplication.onCreate();
 		}
 	}
 
